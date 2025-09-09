@@ -1,7 +1,9 @@
 package com.mchaves.sensors.device.management.domain.model;
 
-import io.hypersistence.tsid.TSID;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +18,9 @@ import java.io.Serializable;
 @Entity
 public class Sensor implements Serializable {
 
-    private TSID id;
+    @Id
+    @AttributeOverride(name = "value", column = @Column(name = "id", columnDefinition = "BIGINT"))
+    private SensorId id;
     private String name;
     private String ip;
     private String location;
