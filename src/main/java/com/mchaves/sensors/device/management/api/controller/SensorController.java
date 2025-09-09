@@ -7,6 +7,7 @@ import com.mchaves.sensors.device.management.domain.model.Sensor;
 import com.mchaves.sensors.device.management.domain.model.SensorId;
 import com.mchaves.sensors.device.management.domain.repository.SensorRepository;
 import io.hypersistence.tsid.TSID;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,6 +52,29 @@ public class SensorController {
 
         sensor = sensorRepository.saveAndFlush(sensor);
         return convertToModel(sensor);
+    }
+
+    @PutMapping("/{sensorId}")
+    public SensorOutput update(@PathVariable("sensorId") TSID sensorId, @RequestBody @Valid SensorInput input){
+        Sensor sensor = sensorRepository.findById(new SensorId(sensorId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        sensor.setName(input.getName());
+        sensor.setIp(input.getIp());
+        sensor.setLocation(input.getLocation());
+        sensor.setProtocol(input.getProtocol());
+        sensor.setModel(input.getModel());
+
+        Sensor sensorSaved = sensorRepository.save(sensor);
+
+        return convertToModel(sensorSaved);
+    }
+
+    @DeleteMapping("/{sensorId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable TSID sensorId) {
+        Sensor sensor = sensorRepository.findById(new SensorId(sensorId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        sensorRepository.delete(sensor);
     }
 
     private SensorOutput convertToModel(Sensor sensor) {
