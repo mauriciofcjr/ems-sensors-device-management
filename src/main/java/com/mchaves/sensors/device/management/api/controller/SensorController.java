@@ -1,5 +1,6 @@
 package com.mchaves.sensors.device.management.api.controller;
 
+
 import com.mchaves.sensors.device.management.api.client.SensorMonitoringClient;
 import com.mchaves.sensors.device.management.api.model.SensorDetailOutput;
 import com.mchaves.sensors.device.management.api.model.SensorInput;
@@ -12,6 +13,8 @@ import com.mchaves.sensors.device.management.domain.repository.SensorRepository;
 import io.hypersistence.tsid.TSID;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,11 +24,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/sensors")
-@RequiredArgsConstructor
 public class SensorController {
 
-    private final SensorRepository sensorRepository;
-    private final SensorMonitoringClient sensorMonitoringClient;
+    @Autowired
+    private SensorRepository sensorRepository;
+    @Autowired
+    private SensorMonitoringClient sensorMonitoringClient;
+
 
     @GetMapping
     public Page<SensorOutput> search(@PageableDefault Pageable pageable){
@@ -103,7 +108,7 @@ public class SensorController {
         Sensor sensor = sensorRepository.findById(new SensorId(sensorId))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         sensor.setEnable(true);
-        sensorRepository.save(sensor);
+        sensorRepository.saveAndFlush(sensor);
         sensorMonitoringClient.enableMonitoring(sensorId);
     }
 

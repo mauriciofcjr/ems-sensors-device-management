@@ -30,8 +30,8 @@ public class RestClientFactory {
 
     private ClientHttpRequestFactory generateClientHttpRequestFactory() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(Duration.ofSeconds(3));
-        factory.setReadTimeout(Duration.ofSeconds(5));
+        factory.setConnectTimeout(Duration.ofSeconds(30));
+        factory.setReadTimeout(Duration.ofSeconds(30));
         return factory;
     }
 }

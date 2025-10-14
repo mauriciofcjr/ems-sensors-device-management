@@ -8,8 +8,8 @@ import com.mchaves.sensors.device.management.api.client.SensorMonitoringClient;
 import com.mchaves.sensors.device.management.api.model.SensorMonitoringOutput;
 
 import io.hypersistence.tsid.TSID;
-
-@Component
+//Substituimos pelo RestClientConfig
+//@Component
 public class SensorMonitoringClientImpl implements SensorMonitoringClient {
 
     private final RestClient restClient;
