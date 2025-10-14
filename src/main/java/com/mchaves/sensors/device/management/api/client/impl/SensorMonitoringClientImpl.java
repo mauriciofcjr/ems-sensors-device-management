@@ -5,6 +5,7 @@ import org.springframework.web.client.RestClient;
 
 import com.mchaves.sensors.device.management.api.client.RestClientFactory;
 import com.mchaves.sensors.device.management.api.client.SensorMonitoringClient;
+import com.mchaves.sensors.device.management.api.model.SensorMonitoringOutput;
 
 import io.hypersistence.tsid.TSID;
 
@@ -32,5 +33,14 @@ public class SensorMonitoringClientImpl implements SensorMonitoringClient {
                 .uri("/api/sensors/{sensorId}/monitoring/enable", sensorId)
                 .retrieve()
                 .toBodilessEntity();
+    }
+
+    @Override
+    public SensorMonitoringOutput getDetail(TSID sensorId) {
+        return restClient.get()
+                .uri("/api/sensors/{sensorId}/monitoring", sensorId)
+                .retrieve()
+                .body(SensorMonitoringOutput.class);
+
     }
 }
